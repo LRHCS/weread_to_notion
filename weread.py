@@ -194,7 +194,7 @@ def get_chapter_info(bookId):
     return None
 
 
-def insert_to_notion(bookName, bookId, cover, sort, author,isbn,rating):
+def insert_to_notion(bookName, bookId, cover, sort, author,isbn,rating, category):
     """插入到notion"""
     time.sleep(0.3)
     parent = {
@@ -209,6 +209,7 @@ def insert_to_notion(bookName, bookId, cover, sort, author,isbn,rating):
         "Author": {"rich_text": [{"type": "text", "text": {"content": author}}]},
         "Sort": {"number": sort},
         "Rating": {"number": rating},
+        "Category" : {"rich_text": [{"type": "text", "text": {"content": category}}]},
         "Cover": {"files": [{"type": "external", "name": "Cover", "external": {"url": cover}}]},
     }
     read_info = get_read_info(bookId=bookId)
@@ -399,6 +400,8 @@ if __name__ == "__main__":
             cover = book.get("cover")
             bookId = book.get("bookId")
             author = book.get("author")
+            categories = book.get("categories")
+            category = categories.get("title")
             check(bookId)
             chapter = get_chapter_info(bookId)
             bookmark_list = get_bookmark_list(bookId)
@@ -409,7 +412,7 @@ if __name__ == "__main__":
             isbn,rating = get_bookinfo(bookId)
             children, grandchild = get_children(
                 chapter, summary, bookmark_list)
-            id = insert_to_notion(title, bookId, cover, sort, author,isbn,rating)
+            id = insert_to_notion(title, bookId, cover, sort, author,isbn,rating, category)
             results = add_children(id, children)
             if(len(grandchild)>0 and results!=None):
                 add_grandchild(grandchild, results)
