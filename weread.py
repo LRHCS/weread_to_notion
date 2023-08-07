@@ -396,12 +396,13 @@ if __name__ == "__main__":
             if sort <= latest_sort:
                 continue
             book = book.get("book")
+            print(book)
             title = book.get("title")
             cover = book.get("cover")
             bookId = book.get("bookId")
             author = book.get("author")
-            categories = book.get("categories")
-            category = categories.get("title")[1]
+            categories = book.get("categories")[0]
+            category = categories.get("title")
             check(bookId)
             chapter = get_chapter_info(bookId)
             bookmark_list = get_bookmark_list(bookId)
